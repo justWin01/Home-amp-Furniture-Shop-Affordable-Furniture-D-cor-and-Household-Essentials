@@ -1,17 +1,18 @@
 <header class="header">
     <div class="left">
+      <img src="" alt="Home & Furniture Logo" width="60" height="60">
       <h1>Home & Furniture Shop</h1>
     </div>
   
     <nav class="center">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a>
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
       <a routerLink="/about" routerLinkActive="active">About Us</a>
       <a routerLink="/contact" routerLinkActive="active">Contact</a>
       <a routerLink="/shop" routerLinkActive="active">Shop</a>
     </nav>
   
     <div class="header-right">
-      <input type="text" placeholder="Search products...">
+      <input type="text" placeholder="Search products..." />
       <button routerLink="/login">Login</button>
     </div>
   </header>
