@@ -1,0 +1,18 @@
+from extensions import db
+from app.models.user import User
+
+class UserRepository:
+
+    @staticmethod
+    def get_all():
+        return User.query.all()
+
+    @staticmethod
+    def find_by_email(email):
+        return User.query.filter_by(email=email).first()
+
+    @staticmethod
+    def create(user):
+        db.session.add(user)
+        db.session.commit()
+        return user

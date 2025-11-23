@@ -1,7 +1,8 @@
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+import os
 
 class Config:
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:@localhost/home_furniture_db"
+    SECRET_KEY = os.getenv("SECRET_KEY", "supersecretkey")
+    SQLALCHEMY_DATABASE_URI =  "mysql://root:@localhost/home_furniture_db"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+
