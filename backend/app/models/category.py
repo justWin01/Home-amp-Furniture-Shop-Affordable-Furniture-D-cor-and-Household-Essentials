@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from .product import Product  # Optional: only if needed
+from extensions import db
 
 db = SQLAlchemy()
 
