@@ -1,0 +1,158 @@
+/* === Elegant Modern Header === */
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 45px;
+  background: linear-gradient(90deg, #d4b100, #b89000);
+  color: #000;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+nav {
+  display: flex;
+  gap: 35px;
+}
+
+nav a {
+  font-size: 1rem;
+  color: #000;
+  font-weight: 500;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Elegant underline hover */
+nav a::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: #fff;
+  transition: width 0.3s ease;
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.header-right input {
+  padding: 7px 12px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  background: #f2f2f2;
+  font-size: 0.95rem;
+  transition: box-shadow 0.2s;
+}
+
+.header-right input:focus {
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.5);
+}
+
+/* Elegant Login Button */
+.login-btn {
+  background-color: #000000;
+  color: #ffd700;
+  padding: 7px 14px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  background-color: #ffd700;
+  color: #000;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* ==================== MEDIA QUERIES ==================== */
+
+@media (max-width: 1200px) {
+  header {
+    padding: 15px 30px;
+  }
+  nav {
+    gap: 25px;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    padding: 15px 20px;
+  }
+
+  nav {
+    gap: 18px;
+  }
+
+  .header-right input {
+    font-size: 0.85rem;
+  }
+
+  .login-btn {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+  }
+
+  .logo {
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+  }
+
+  nav {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    text-align: center;
+  }
+
+  nav a {
+    font-size: 1.15rem;
+  }
+
+  .header-right {
+    margin-top: 12px;
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .header-right input {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .login-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+  }
+}
