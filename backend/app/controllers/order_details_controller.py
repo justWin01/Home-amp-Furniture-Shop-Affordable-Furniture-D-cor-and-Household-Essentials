@@ -1,9 +1,43 @@
 from flask import Blueprint, request, jsonify
 from app.services.order_details_service import OrderDetailsService
 
-order_details_bp = Blueprint('order_details', __name__)
+order_details_bp = Blueprint("order_details_bp", __name__)
 
-@order_details_bp.route('/<int:order_id>', methods=['GET'])
-def get_order_details(order_id):
-    details = OrderDetailsService.get_by_order(order_id)
-    return jsonify([d.serialize() for d in details])
+@order_details_bp.route("/", methods=["GET"])
+def get_order_details():
+    details = OrderDetailsService.get_all_order_details()
+    return jsonify([{
+        "order_details_id": d.order_details_id,
+        "order_id": d.order_id,
+        "product_id": d.product_id,
+        "quantity": d.quantity,
+        "price": d.price
+    } for d in details])
+
+@order_details_bp.route("/<int:id>", methods=["GET"])
+def get_order_detail(id):
+    d = OrderDetailsService.get_order_detail_by_id(id)
+    return jsonify({
+        "order_details_id": d.order_details_id,
+        "order_id": d.order_id,
+        "product_id": d.product_id,
+        "quantity": d.quantity,
+        "price": d.price
+    })
+
+@order_details_bp.route("/", methods=["POST"])
+def create_order_detail():
+    data = request.get_json()
+    OrderDetailsService.create_order_detail(data)
+    return jsonify({"message": "Order detail created"}), 201
+
+@order_details_bp.route("/<int:id>", methods=["PUT"])
+def update_order_detail(id):
+    data = request.get_json()
+    OrderDetailsService.update_order_detail(id, data)
+    return jsonify({"message": "Order detail updated"})
+
+@order_details_bp.route("/<int:id>", methods=["DELETE"])
+def delete_order_detail(id):
+    OrderDetailsService.delete_order_detail(id)
+    return jsonify({"message": "Order detail deleted"})

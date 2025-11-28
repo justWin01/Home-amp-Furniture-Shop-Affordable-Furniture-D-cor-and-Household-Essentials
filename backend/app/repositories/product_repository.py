@@ -1,12 +1,7 @@
-from extensions import db
 from app.models.product import Product
+from extensions import db
 
 class ProductRepository:
-    @staticmethod
-    def add(product):
-        db.session.add(product)
-        db.session.commit()
-        return product
 
     @staticmethod
     def get_all():
@@ -15,3 +10,9 @@ class ProductRepository:
     @staticmethod
     def get_by_id(product_id):
         return Product.query.get(product_id)
+
+    @staticmethod
+    def create(product):
+        db.session.add(product)
+        db.session.commit()
+        return product

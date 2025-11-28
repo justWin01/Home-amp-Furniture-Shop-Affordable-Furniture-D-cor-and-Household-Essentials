@@ -1,15 +1,39 @@
 from flask import Blueprint, request, jsonify
 from app.services.category_service import CategoryService
 
-category_bp = Blueprint('category', __name__)
+category_bp = Blueprint("category_bp", __name__)
 
-@category_bp.route('/', methods=['GET'])
+@category_bp.route("/", methods=["GET"])
 def get_categories():
-    categories = CategoryService.get_all()
-    return jsonify([c.serialize() for c in categories])
+    categories = CategoryService.get_all_categories()
+    return jsonify([{
+        "category_id": c.category_id,
+        "category_name": c.category_name,
+        "description": c.description
+    } for c in categories])
 
-@category_bp.route('/', methods=['POST'])
+@category_bp.route("/<int:category_id>", methods=["GET"])
+def get_category(category_id):
+    c = CategoryService.get_category_by_id(category_id)
+    return jsonify({
+        "category_id": c.category_id,
+        "category_name": c.category_name,
+        "description": c.description
+    })
+
+@category_bp.route("/", methods=["POST"])
 def create_category():
-    data = request.json
-    category = CategoryService.create(data)
-    return jsonify(category.serialize()), 201
+    data = request.get_json()
+    CategoryService.create_category(data)
+    return jsonify({"message": "Category created"}), 201
+
+@category_bp.route("/<int:category_id>", methods=["PUT"])
+def update_category(category_id):
+    data = request.get_json()
+    CategoryService.update_category(category_id, data)
+    return jsonify({"message": "Category updated"})
+
+@category_bp.route("/<int:category_id>", methods=["DELETE"])
+def delete_category(category_id):
+    CategoryService.delete_category(category_id)
+    return jsonify({"message": "Category deleted"})

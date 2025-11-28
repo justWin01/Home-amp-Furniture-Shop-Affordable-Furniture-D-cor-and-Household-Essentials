@@ -1,13 +1,43 @@
-from app.repositories.product_repository import ProductRepository
+from extensions import db
 from app.models.product import Product
 
 class ProductService:
 
     @staticmethod
-    def get_all():
-        return ProductRepository.get_all()
+    def get_all_products():
+        return Product.query.all()
 
     @staticmethod
-    def create(data):
-        product = Product(**data)
-        return ProductRepository.create(product)
+    def get_product_by_id(product_id):
+        return Product.query.get_or_404(product_id)
+
+    @staticmethod
+    def create_product(data):
+        product = Product(
+            product_name=data["product_name"],
+            price=data["price"],
+            stock=data.get("stock", 0),
+            description=data.get("description"),
+            category_id=data.get("category_id")
+        )
+        db.session.add(product)
+        db.session.commit()
+        return product
+
+    @staticmethod
+    def update_product(product_id, data):
+        product = Product.query.get_or_404(product_id)
+        product.product_name = data.get("product_name", product.product_name)
+        product.price = data.get("price", product.price)
+        product.stock = data.get("stock", product.stock)
+        product.description = data.get("description", product.description)
+        product.category_id = data.get("category_id", product.category_id)
+        db.session.commit()
+        return product
+
+    @staticmethod
+    def delete_product(product_id):
+        product = Product.query.get_or_404(product_id)
+        db.session.delete(product)
+        db.session.commit()
+        return True

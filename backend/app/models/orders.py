@@ -1,21 +1,25 @@
+from datetime import datetime
 from extensions import db
 
 class Orders(db.Model):
     __tablename__ = 'orders'
 
-    order_id = db.Column(db.Integer, primary_key=True)
-    customer_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-    order_date = db.Column(db.DateTime, server_default=db.func.now())
+    order_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    customer_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    order_date = db.Column(db.DateTime, default=datetime.utcnow)
     total_amount = db.Column(db.Numeric(10,2), default=0.00)
-    status = db.Column(db.Enum('Pending','Shipped','Completed','Cancelled'), default='Pending')
+    status = db.Column(db.Enum('Pending', 'Shipped', 'Completed', 'Cancelled', name='order_status'), default='Pending')
 
-    customer = db.relationship('User', backref='orders')
+    order_details = db.relationship('OrderDetails', backref='order', lazy=True)
+
+    def __repr__(self):
+        return f"<Order {self.order_id}>"
 
     def to_dict(self):
         return {
-            'order_id': self.order_id,
-            'customer_id': self.customer_id,
-            'order_date': self.order_date.isoformat(),
-            'total_amount': float(self.total_amount),
-            'status': self.status
+            "order_id": self.order_id,
+            "customer_id": self.customer_id,
+            "order_date": self.order_date.isoformat() if self.order_date else None,
+            "total_amount": float(self.total_amount),
+            "status": self.status
         }
