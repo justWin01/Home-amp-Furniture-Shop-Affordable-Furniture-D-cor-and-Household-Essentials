@@ -1,24 +1,55 @@
 from flask import Blueprint, request, jsonify
-from app.services.auth_service import AuthService
 from app.services.user_service import UserService
+from app.services.auth_service import AuthService
 
-user_bp = Blueprint("users", __name__)
+user_bp = Blueprint('user', __name__)
 
-@user_bp.route("/users", methods=["GET"])
+# Get all users (Admin only)
+@user_bp.route('/', methods=['GET'])
 def get_users():
     users = UserService.get_all()
-    return jsonify([u.email for u in users])
+    return jsonify([{
+        "user_id": u.user_id,
+        "full_name": u.full_name,
+        "email": u.email,
+        "contact_number": u.contact_number,
+        "address": u.address,
+        "role": u.role
+    } for u in users])
 
-@user_bp.route("/register", methods=["POST"])
+# Get user by ID
+@user_bp.route('/<int:id>', methods=['GET'])
+def get_user(id):
+    user = UserService.get_by_id(id)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+    return jsonify({
+        "user_id": user.user_id,
+        "full_name": user.full_name,
+        "email": user.email,
+        "contact_number": user.contact_number,
+        "address": user.address,
+        "role": user.role
+    })
+
+# Register
+@user_bp.route('/register', methods=['POST'])
 def register():
     data = request.json
-    user = AuthService.register(data["fullname"], data["email"], data["password"])
-    return jsonify({"message": "User registered", "id": user.user_id})
+    user = AuthService.register(
+        full_name=data.get('full_name'),
+        email=data.get('email'),
+        password=data.get('password'),
+        contact_number=data.get('contact_number'),
+        address=data.get('address')
+    )
+    return jsonify({"message": "User registered", "user_id": user.user_id})
 
-@user_bp.route("/login", methods=["POST"])
+# Login
+@user_bp.route('/login', methods=['POST'])
 def login():
     data = request.json
-    user = AuthService.login(data["email"], data["password"])
+    user, token = AuthService.login(data.get('email'), data.get('password'))
     if not user:
         return jsonify({"message": "Invalid credentials"}), 401
-    return jsonify({"message": "Login successful", "email": user.email})
+    return jsonify({"message": "Login successful", "token": token})

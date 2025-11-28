@@ -1,27 +1,30 @@
-from flask import Flask
+from flask import Flask, jsonify
 from config import Config
 from extensions import db, bcrypt, jwt
 from flask_cors import CORS
-from .routes import register_routes
+from app.routes import register_routes
+
+
+
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    # Init extensions
+    # init extensions
     db.init_app(app)
     bcrypt.init_app(app)
     jwt.init_app(app)
 
-    # Correct CORS usage
+    # enable CORS for API routes
     CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-    # Root route
+    # simple health-check
     @app.route('/')
-    def home():
-        return "Flask backend is running!"
+    def index():
+        return jsonify({'message': 'Flask backend is running'})
 
-    # Register blueprints
+    # register blueprints
     register_routes(app)
 
     return app

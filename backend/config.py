@@ -1,7 +1,18 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Load environment variables from .env
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'your_secret_key'
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:@localhost/home_furniture_db'
+    SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret')
+    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'jwt-secret')
+
+    DB_USER = os.getenv('DB_USER', 'root')
+    DB_PASSWORD = os.getenv('DB_PASSWORD', '')
+    DB_HOST = os.getenv('DB_HOST', 'localhost')
+    DB_NAME = os.getenv('DB_NAME', 'home_furniture_db')
+
+    SQLALCHEMY_DATABASE_URI = (
+        f"mysql+mysqlconnector://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+    )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') or 'your_jwt_secret_key'
