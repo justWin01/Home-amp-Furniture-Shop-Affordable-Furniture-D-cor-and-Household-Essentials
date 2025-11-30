@@ -1,1 +1,29 @@
-<p>login works!</p>
+<div class="login-page">
+  <div class="login-container">
+    <h2>Login</h2>
+    <input type="email" [(ngModel)]="email" placeholder="Email" />
+    <input type="password" [(ngModel)]="password" placeholder="Password" />
+    <button (click)="onLogin()">Login</button>
+    <p class="message">{{ message }}</p>
+
+    <p class="signup-text">
+      Don't have an account?
+      <span class="signup-link" (click)="openSignUpModal()">Sign Up</span>
+    </p>
+  </div>
+</div>
+
+<!-- Sign Up Modal -->
+<div class="modal-backdrop" *ngIf="isSignUpOpen" (click)="closeSignUpModal()">
+  <div class="signup-container" (click)="$event.stopPropagation()">
+    <h2>Sign Up</h2>
+    <input type="text" [(ngModel)]="signupName" placeholder="Full Name" />
+    <input type="email" [(ngModel)]="signupEmail" placeholder="Email" />
+    <input type="password" [(ngModel)]="signupPassword" placeholder="Password" />
+    <input type="text" [(ngModel)]="signupContact" placeholder="Contact Number" />
+    <input type="text" [(ngModel)]="signupAddress" placeholder="Address" />
+    <button (click)="onSignUp()">Sign Up</button>
+    <p class="message">{{ signUpMessage }}</p>
+    <button class="close-btn" (click)="closeSignUpModal()">X</button>
+  </div>
+</div>
