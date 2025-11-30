@@ -1,5 +1,7 @@
-from extensions import db, bcrypt
+from werkzeug.security import generate_password_hash
+from extensions import db
 from app.models.user import User
+from werkzeug.security import check_password_hash
 
 class UserService:
 
@@ -13,11 +15,13 @@ class UserService:
 
     @staticmethod
     def create_user(data):
-        hashed_password = bcrypt.generate_password_hash(
-            data["password"]
-        ).decode("utf-8")
+        # Check if email exists
+        if User.query.filter_by(email=data["email"]).first():
+            raise ValueError("Email already registered")
 
-        user = User(
+        hashed_password = generate_password_hash(data["password"])
+
+        new_user = User(
             full_name=data["full_name"],
             email=data["email"],
             password=hashed_password,
@@ -25,27 +29,36 @@ class UserService:
             address=data.get("address"),
             role=data.get("role", "Customer")
         )
-        db.session.add(user)
+
+        db.session.add(new_user)
         db.session.commit()
-        return user
+        return new_user
+
+    @staticmethod
+    def login_user(data):
+        email = data.get("email")
+        password = data.get("password")
+
+        user = User.query.filter_by(email=email).first()
+
+        if not user:
+            return {"error": "Invalid email or password"}, 401
+
+        if not check_password_hash(user.password, password):
+            return {"error": "Invalid email or password"}, 401
+
+        return {
+            "message": "Login successful",
+            "user": user.to_dict()
+        }, 200
 
     @staticmethod
     def update_user(user_id, data):
         user = User.query.get_or_404(user_id)
-
         user.full_name = data.get("full_name", user.full_name)
         user.email = data.get("email", user.email)
-
-        # hash password only if user wants to change it
-        if "password" in data and data["password"]:
-            user.password = bcrypt.generate_password_hash(
-                data["password"]
-            ).decode("utf-8")
-
         user.contact_number = data.get("contact_number", user.contact_number)
         user.address = data.get("address", user.address)
-        user.role = data.get("role", user.role)
-
         db.session.commit()
         return user
 
@@ -54,4 +67,3 @@ class UserService:
         user = User.query.get_or_404(user_id)
         db.session.delete(user)
         db.session.commit()
-        return True

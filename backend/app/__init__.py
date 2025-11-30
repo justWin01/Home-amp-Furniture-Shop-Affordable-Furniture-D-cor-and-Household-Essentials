@@ -22,16 +22,47 @@ def create_app():
 
     # API documentation route
     @app.get("/api")
-    def api_info():  
+    def api_info():
         return jsonify({
             "endpoints": {
-                "users": "Full CRUD at /api/auth",
-                "categories": "Full CRUD at /api/categories",
-                "products": "Full CRUD at /api/products",
-                "orders": "Full CRUD at /api/orders",
-                "order_details": "Full CRUD at /api/order-details"
+                "get_all_users": "/api/users - List of all users",
+                "get_user_by_id": "/api/users/<id> - Get specific user",
+                "register_user": {
+                    "endpoint": "/api/users/register",
+                    "method": "POST",
+                    "body": {
+                        "full_name": "",
+                        "email": "",
+                        "password": "",
+                        "contact_number": "",
+                        "address": ""
+                    }
+                },
+                "login_user": {
+                    "endpoint": "/api/users/login",
+                    "method": "POST",
+                    "body": {
+                        "email": "",
+                        "password": ""
+                    }
+                },
+                "update_user": {
+                    "endpoint": "/api/users/<id>",
+                    "method": "PUT",
+                    "body": {
+                        "name": "",
+                        "email": "",
+                        "password": ""
+                    }
+                },
+                "delete_user": "/api/users/<id> - DELETE user",
+                "categories": "/api/categories - Full CRUD",
+                "products": "/api/products - Full CRUD",
+                "orders": "/api/orders - Full CRUD",
+                "order_details": "/api/order-details - Full CRUD"
             }
         })
+
 
     # Register all blueprints
     register_routes(app)
