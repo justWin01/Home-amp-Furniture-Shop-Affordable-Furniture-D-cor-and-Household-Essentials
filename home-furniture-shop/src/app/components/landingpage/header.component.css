@@ -1,6 +1,17 @@
-/* === Elegant Modern Header === */
+/* =================== GLOBAL ACCESSIBILITY =================== */
 
-header {
+.visually-hidden {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* =================== HEADER LAYOUT =================== */
+
+.site-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -12,28 +23,40 @@ header {
   flex-wrap: wrap;
 }
 
-.logo {
-  font-size: 1.3rem;
-  font-weight: 700;
-  letter-spacing: 1px;
+/* =================== LEFT SIDE =================== */
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
-nav {
+.site-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+/* =================== NAVIGATION =================== */
+
+.main-navigation ul {
   display: flex;
   gap: 35px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-nav a {
+.main-navigation a {
   font-size: 1rem;
   color: #000;
-  font-weight: 500;
   text-decoration: none;
+  font-weight: 500;
   position: relative;
   transition: all 0.3s ease;
 }
 
 /* Elegant underline hover */
-nav a::after {
+.main-navigation a::after {
   content: "";
   position: absolute;
   bottom: -5px;
@@ -44,17 +67,19 @@ nav a::after {
   transition: width 0.3s ease;
 }
 
-nav a:hover::after {
+.main-navigation a:hover::after {
   width: 100%;
 }
 
-.header-right {
+/* =================== RIGHT SIDE =================== */
+
+.header-actions {
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
-.header-right input {
+.header-actions input {
   padding: 7px 12px;
   border: none;
   border-radius: 8px;
@@ -64,11 +89,11 @@ nav a:hover::after {
   transition: box-shadow 0.2s;
 }
 
-.header-right input:focus {
+.header-actions input:focus {
   box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.5);
 }
 
-/* Elegant Login Button */
+/* Login Button */
 .login-btn {
   background-color: #000000;
   color: #ffd700;
@@ -89,70 +114,45 @@ nav a:hover::after {
 /* ==================== MEDIA QUERIES ==================== */
 
 @media (max-width: 1200px) {
-  header {
+  .site-header {
     padding: 15px 30px;
   }
-  nav {
+  .main-navigation ul {
     gap: 25px;
   }
 }
 
 @media (max-width: 768px) {
-  header {
+  .site-header {
     padding: 15px 20px;
   }
-
-  nav {
+  .main-navigation ul {
     gap: 18px;
   }
-
-  .header-right input {
+  .header-actions input {
     font-size: 0.85rem;
   }
-
   .login-btn {
     font-size: 0.85rem;
   }
 }
 
 @media (max-width: 480px) {
-  header {
+  .site-header {
     flex-direction: column;
     align-items: flex-start;
-    padding: 15px;
+    gap: 15px;
   }
-
-  .logo {
-    font-size: 1.4rem;
-    margin-bottom: 12px;
-  }
-
-  nav {
+  .main-navigation ul {
     flex-direction: column;
     gap: 12px;
-    width: 100%;
-    text-align: center;
   }
-
-  nav a {
-    font-size: 1.15rem;
-  }
-
-  .header-right {
-    margin-top: 12px;
+  .header-actions {
     flex-direction: column;
     width: 100%;
-    gap: 12px;
   }
-
-  .header-right input {
-    width: 100%;
-    font-size: 1rem;
-  }
-
+  .header-actions input,
   .login-btn {
     width: 100%;
-    padding: 10px;
-    font-size: 1rem;
   }
 }

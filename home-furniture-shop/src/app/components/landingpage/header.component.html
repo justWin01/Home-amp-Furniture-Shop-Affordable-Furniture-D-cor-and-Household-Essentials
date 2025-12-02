@@ -1,18 +1,25 @@
-<header class="header">
-    <div class="left">
-      <img src="" alt="Home & Furniture Logo" width="60" height="60">
-      <h1>Home & Furniture Shop</h1>
-    </div>
+<header class="site-header">
+  <div class="header-left">
+    <figure class="logo-container">
+      <img src="" alt="Home & Furniture Logo" width="60" height="60" />
+    </figure>
 
-    <nav class="center">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
-      <a routerLink="/about" routerLinkActive="active">About Us</a>
-      <a routerLink="/contact" routerLinkActive="active">Contact</a>
-      <a routerLink="/shop" routerLinkActive="active">Shop</a>
-    </nav>
+    <h1 class="site-title">Home & Furniture Shop</h1>
+  </div>
 
-    <div class="header-right">
-      <input type="text" placeholder="Search products..." />
-      <button routerLink="/login">Login</button>
-    </div>
-  </header>
+  <nav class="main-navigation" aria-label="Main Navigation">
+    <ul>
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a></li>
+      <li><a routerLink="/about" routerLinkActive="active">About Us</a></li>
+      <li><a routerLink="/contact" routerLinkActive="active">Contact</a></li>
+      <li><a routerLink="/shop" routerLinkActive="active">Shop</a></li>
+    </ul>
+  </nav>
+
+  <div class="header-actions">
+    <label for="search" class="visually-hidden">Search products</label>
+    <input id="search" type="search" placeholder="Search products..." />
+
+    <button class="login-btn" routerLink="/login">Login</button>
+  </div>
+</header>
