@@ -39,7 +39,7 @@ export class LoginComponent {
       next: (res: any) => {
         this.message = 'Login successful!';
         if (res.token) localStorage.setItem('token', res.token);
-        this.router.navigate(['/']);
+        this.router.navigate(['/customerui']);
       },
       error: (err: any) => {
         this.message = 'Login failed: ' + (err.error?.message || err.message);

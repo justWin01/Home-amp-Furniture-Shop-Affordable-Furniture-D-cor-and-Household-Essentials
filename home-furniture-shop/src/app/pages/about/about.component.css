@@ -1,7 +1,26 @@
 .about-section {
   padding: 40px 60px;
   background-color: #f9f5e7;
+  overflow: hidden; /* ensures hidden elements don't show before animation */
 }
+
+/* Apply slideUp to all children with staggered delays */
+.about-section * {
+  opacity: 0;
+  transform: translateY(40px);
+  animation: slideUp 0.6s ease forwards;
+}
+
+/* Staggered delays for smoother sequential animation */
+.about-hero { animation-delay: 0.1s; }
+.about-hero h1 { animation-delay: 0.2s; }
+.about-hero p { animation-delay: 0.25s; }
+.about-content { animation-delay: 0.3s; }
+.about-image img { animation-delay: 0.4s; }
+.about-text { animation-delay: 0.5s; }
+.about-text h2 { animation-delay: 0.55s; }
+.about-text p { animation-delay: 0.6s; }
+.about-text ul { animation-delay: 0.65s; }
 
 .about-hero {
   text-align: center;
@@ -11,7 +30,7 @@
 .about-hero h1 {
   font-size: 2.2rem;
   font-weight: 700;
-  color: #b89000;
+  color: #000000;
 }
 
 .about-hero p {
@@ -39,7 +58,7 @@
 
 .about-text h2 {
   margin-top: 20px;
-  color: #b89000;
+  color: #000000;
   font-size: 1.4rem;
 }
 
@@ -64,4 +83,10 @@
   .about-text {
     max-width: 100%;
   }
+}
+
+/* Slide Animation */
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
