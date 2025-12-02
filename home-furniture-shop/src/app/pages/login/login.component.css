@@ -74,11 +74,24 @@ button:hover {
   background-color: #8a7302;
 }
 
+@keyframes fadeInMessage {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+
 .message {
   color: rgb(26, 255, 0);
   font-size: 0.9rem;
   text-align: center;
+  opacity: 0; /* start hidden */
+  animation: fadeInMessage 5s forwards; /* fade in over 5 seconds */
 }
+
+.fade-in {
+  animation: fadeInMessage 5s forwards;
+}
+
 
 /* Sign Up Link */
 .signup-text {

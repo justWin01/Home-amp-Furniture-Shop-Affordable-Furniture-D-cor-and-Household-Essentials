@@ -15,15 +15,29 @@ def get_user(user_id):
     u = UserService.get_user_by_id(user_id)
     return jsonify(u.to_dict())
 
-# REGISTER USER (SIGN UP)
+# REGISTER USER (SIGN UP) - CUSTOMER ONLY
 @user_bp.route("/signup", methods=["POST"])
 def signup():
     data = request.get_json()
     try:
+        data['role'] = 'Customer'  
         new_user = UserService.create_user(data)
         return jsonify({"message": "Account created successfully!", "user": new_user.to_dict()}), 201
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
+
+# REGISTER ADMIN - PROTECTED
+@user_bp.route("/admin/register", methods=["POST"])
+def register_admin():
+    # TODO: Add admin authentication check here
+    data = request.get_json()
+    try:
+        data['role'] = 'Admin'  # Force role to Admin
+        new_user = UserService.create_user(data)
+        return jsonify({"message": "Admin created successfully!", "user": new_user.to_dict()}), 201
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+
 
 # REGISTER USER (ALTERNATIVE)
 @user_bp.route("/register", methods=["POST"])
@@ -41,6 +55,14 @@ def login_user():
     data = request.get_json()
     result, status = UserService.login_user(data)
     return jsonify(result), status
+
+# ADMIN LOGIN
+@user_bp.route("/admin/login", methods=["POST"])
+def login_admin():
+    data = request.get_json()
+    result, status = UserService.login_admin(data)
+    return jsonify(result), status
+
 
 # FORGOT PASSWORD
 @user_bp.route("/forgot-password", methods=["POST"])

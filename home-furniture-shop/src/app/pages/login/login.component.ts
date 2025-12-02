@@ -38,11 +38,13 @@ export class LoginComponent {
     this.userService.login(this.email, this.password).subscribe({
       next: (res: any) => {
         this.message = 'Login successful!';
+        setTimeout(() => this.message = '', 5000);
         if (res.token) localStorage.setItem('token', res.token);
         this.router.navigate(['/customerui']);
       },
       error: (err: any) => {
         this.message = 'Login failed: ' + (err.error?.message || err.message);
+        setTimeout(() => this.message = '', 5000);
       }
     });
   }
@@ -71,13 +73,14 @@ export class LoginComponent {
       address: this.signupAddress
     };
 
-    this.userService.register(signupData).subscribe({
+    this.userService.signup(signupData).subscribe({
       next: (res: any) => {
         this.signUpMessage = 'Sign Up successful! You can now log in.';
         setTimeout(() => this.closeSignUpModal(), 2000);
       },
       error: (err: any) => {
         this.signUpMessage = 'Sign Up failed: ' + (err.error?.message || err.message);
+        setTimeout(() => this.message = '', 5000);
       }
     });
   }
