@@ -3,14 +3,17 @@ from app.models.category import Category
 
 class CategoryService:
 
+    # GET ALL CATEGORIES
     @staticmethod
     def get_all_categories():
         return Category.query.all()
 
+    # GET CATEGORY BY ID
     @staticmethod
     def get_category_by_id(category_id):
         return Category.query.get_or_404(category_id)
 
+    # CREATE CATEGORY
     @staticmethod
     def create_category(data):
         category = Category(
@@ -21,6 +24,7 @@ class CategoryService:
         db.session.commit()
         return category
 
+    # UPDATE CATEGORY
     @staticmethod
     def update_category(category_id, data):
         category = Category.query.get_or_404(category_id)
@@ -29,6 +33,7 @@ class CategoryService:
         db.session.commit()
         return category
 
+    # DELETE CATEGORY
     @staticmethod
     def delete_category(category_id):
         category = Category.query.get_or_404(category_id)

@@ -3,14 +3,17 @@ from app.models.product import Product
 
 class ProductService:
 
+    # GET ALL PRODUCTS
     @staticmethod
     def get_all_products():
         return Product.query.all()
 
+    # GET PRODUCTS BY ID
     @staticmethod
     def get_product_by_id(product_id):
         return Product.query.get_or_404(product_id)
 
+    # ADD PRODUCTS
     @staticmethod
     def create_product(data):
         product = Product(
@@ -24,6 +27,7 @@ class ProductService:
         db.session.commit()
         return product
 
+    # UPDATE PRODUCTS
     @staticmethod
     def update_product(product_id, data):
         product = Product.query.get_or_404(product_id)
@@ -35,6 +39,7 @@ class ProductService:
         db.session.commit()
         return product
 
+    # DELETE PRODUCTS
     @staticmethod
     def delete_product(product_id):
         product = Product.query.get_or_404(product_id)

@@ -31,3 +31,4 @@ class Config:
 
     # CORS
     CORS_ORIGINS = os.environ.get("CORS_ORIGINS", "*")
+ 

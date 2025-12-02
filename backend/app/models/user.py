@@ -4,6 +4,7 @@ from extensions import db
 class User(db.Model):
     __tablename__ = 'users'
 
+    # USER MODEL FIELDS
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     full_name = db.Column(db.String(150), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
@@ -13,11 +14,14 @@ class User(db.Model):
     role = db.Column(db.Enum('Admin', 'Customer', name='user_roles'), default='Customer', nullable=False)
     date_joined = db.Column(db.DateTime, default=datetime.utcnow)
 
+    # RELATIONSHIPS
     orders = db.relationship('Orders', backref='customer', lazy=True)
 
+    # STRING REPRESENTATION
     def __repr__(self):
         return f"<User {self.full_name}>"
 
+    # CONVERT TO DICTIONARY
     def to_dict(self):
         return {
             "user_id": self.user_id,

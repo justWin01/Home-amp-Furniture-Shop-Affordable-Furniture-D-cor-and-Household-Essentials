@@ -4,30 +4,26 @@ from app.models.user import User
 
 class UserService:
 
-    # ======================
-    # GET ALL USERS
-    # ======================
+    
+    # GET ALL USERS 
     @staticmethod
     def get_all_users():
         return User.query.all()
 
-    # ======================
+    
     # GET USER BY ID
-    # ======================
     @staticmethod
     def get_user_by_id(user_id):
         return User.query.get_or_404(user_id)
 
-    # ======================
+    
     # GET USER BY EMAIL
-    # ======================
     @staticmethod
     def get_user_by_email(email):
         return User.query.filter_by(email=email).first()
 
-    # ======================
-    # CREATE USER (SIGN UP)
-    # ======================
+     
+    # CREATE USER (SIGN UP) 
     @staticmethod
     def create_user(data):
         # Check if email already exists
@@ -50,9 +46,8 @@ class UserService:
 
         return new_user
 
-    # ======================
+    
     # LOGIN USER
-    # ======================
     @staticmethod
     def login_user(data):
         email = data.get("email")
@@ -71,9 +66,8 @@ class UserService:
             "user": user.to_dict()
         }, 200
 
-    # ======================
+    
     # UPDATE USER
-    # ======================
     @staticmethod
     def update_user(user_id, data):
         user = User.query.get_or_404(user_id)
@@ -90,9 +84,8 @@ class UserService:
         db.session.commit()
         return user
 
-    # ======================
+    
     # DELETE USER
-    # ======================
     @staticmethod
     def delete_user(user_id):
         user = User.query.get_or_404(user_id)

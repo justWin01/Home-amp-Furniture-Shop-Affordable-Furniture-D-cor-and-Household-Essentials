@@ -3,27 +3,19 @@ from app.services.user_service import UserService
 
 user_bp = Blueprint("user_bp", __name__)
 
-# ======================
 # GET ALL USERS
-# ======================
 @user_bp.route("/", methods=["GET"])
 def get_users():
     users = UserService.get_all_users()
     return jsonify([u.to_dict() for u in users])
 
-
-# ======================
 # GET USER BY ID
-# ======================
 @user_bp.route("/<int:user_id>", methods=["GET"])
 def get_user(user_id):
     u = UserService.get_user_by_id(user_id)
     return jsonify(u.to_dict())
 
-
-# ======================
-# REGISTER USER (/signup)
-# ======================
+# REGISTER USER (SIGN UP)
 @user_bp.route("/signup", methods=["POST"])
 def signup():
     data = request.get_json()
@@ -33,8 +25,7 @@ def signup():
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
 
-
-# (Optional: old route)
+# REGISTER USER (ALTERNATIVE)
 @user_bp.route("/register", methods=["POST"])
 def register():
     data = request.get_json()
@@ -44,20 +35,14 @@ def register():
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
 
-
-# ======================
-# LOGIN
-# ======================
+# LOGIN USER
 @user_bp.route("/login", methods=["POST"])
 def login_user():
     data = request.get_json()
     result, status = UserService.login_user(data)
     return jsonify(result), status
 
-
-# ======================
 # FORGOT PASSWORD
-# ======================
 @user_bp.route("/forgot-password", methods=["POST"])
 def forgot_password():
     data = request.get_json()
@@ -70,20 +55,14 @@ def forgot_password():
     # Later: email sending logic here
     return jsonify({"message": "Password reset instructions sent!"}), 200
 
-
-# ======================
 # UPDATE USER
-# ======================
 @user_bp.route("/<int:user_id>", methods=["PUT"])
 def update_user(user_id):
     data = request.get_json()
     UserService.update_user(user_id, data)
     return jsonify({"message": "User updated successfully"})
 
-
-# ======================
 # DELETE USER
-# ======================
 @user_bp.route("/<int:user_id>", methods=["DELETE"])
 def delete_user(user_id):
     UserService.delete_user(user_id)
