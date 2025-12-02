@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -13,11 +12,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  // Customer login
   email = '';
   password = '';
   message = '';
 
-  // Sign Up modal fields
+  // Sign Up modal
   isSignUpOpen = false;
   signupName = '';
   signupEmail = '';
@@ -26,9 +26,15 @@ export class LoginComponent {
   signupAddress = '';
   signUpMessage = '';
 
+  // Admin login modal
+  isAdminLoginOpen = false;
+  adminEmail = '';
+  adminPassword = '';
+  adminMessage = '';
+
   constructor(private userService: UserService, private router: Router) {}
 
-  // Login method
+  // ================= CUSTOMER LOGIN =================
   onLogin() {
     if (!this.email || !this.password) {
       this.message = 'Please enter email and password';
@@ -38,18 +44,22 @@ export class LoginComponent {
     this.userService.login(this.email, this.password).subscribe({
       next: (res: any) => {
         this.message = 'Login successful!';
-        setTimeout(() => this.message = '', 5000);
+        setTimeout(() => (this.message = ''), 5000);
+
         if (res.token) localStorage.setItem('token', res.token);
-        this.router.navigate(['/customerui']);
+
+        // Redirect directly to customer dashboard
+        this.router.navigate(['/customer/dashboard']);
       },
       error: (err: any) => {
         this.message = 'Login failed: ' + (err.error?.message || err.message);
-        setTimeout(() => this.message = '', 5000);
+        setTimeout(() => (this.message = ''), 5000);
       }
     });
   }
 
-  // Sign Up modal methods
+
+  // ================= SIGN UP =================
   openSignUpModal() {
     this.isSignUpOpen = true;
   }
@@ -60,7 +70,8 @@ export class LoginComponent {
   }
 
   onSignUp() {
-    if (!this.signupName || !this.signupEmail || !this.signupPassword || !this.signupContact || !this.signupAddress) {
+    if (!this.signupName || !this.signupEmail || !this.signupPassword ||
+        !this.signupContact || !this.signupAddress) {
       this.signUpMessage = 'Please fill all fields';
       return;
     }
@@ -80,7 +91,46 @@ export class LoginComponent {
       },
       error: (err: any) => {
         this.signUpMessage = 'Sign Up failed: ' + (err.error?.message || err.message);
-        setTimeout(() => this.message = '', 5000);
+      }
+    });
+  }
+
+  // ================= FORGOT PASSWORD =================
+  openForgotPassword() {
+    this.router.navigate(['/forgot-password']);
+  }
+
+  // ================= ADMIN LOGIN =================
+  openAdminLoginModal() {
+    this.isAdminLoginOpen = true;
+  }
+
+  closeAdminLoginModal() {
+    this.isAdminLoginOpen = false;
+    this.adminMessage = '';
+  }
+
+  onAdminLogin() {
+    if (!this.adminEmail || !this.adminPassword) {
+      this.adminMessage = 'Please enter admin email and password';
+      return;
+    }
+
+    this.userService.adminLogin(this.adminEmail, this.adminPassword).subscribe({
+      next: (res: any) => {
+        this.adminMessage = 'Admin login successful!';
+        setTimeout(() => {
+          this.adminMessage = '';
+          this.closeAdminLoginModal();
+        }, 1500);
+
+        if (res.token) localStorage.setItem('admin_token', res.token);
+
+        this.router.navigate(['/admin/dashboard']);
+      },
+      error: (err: any) => {
+        this.adminMessage = 'Admin login failed: ' + (err.error?.message || err.message);
+        setTimeout(() => (this.adminMessage = ''), 5000);
       }
     });
   }

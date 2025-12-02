@@ -1,20 +1,20 @@
-<section class="slider-container">
+<section class="slider-container"
+         (mouseenter)="pauseSlider()"
+         (mouseleave)="resumeSlider()">
+
   <div class="slider">
+    <div *ngFor="let slide of slides; let i = index"
+         class="slide fade"
+         [class.active]="i === currentSlide"
+         [attr.aria-hidden]="i === currentSlide ? 'false' : 'true'">
 
-    <div class="slide fade">
-      <img src="assets/images/furniture.jpg" alt="Furniture Category" />
-      <div class="caption">Furniture</div>
+      <img [src]="slide.image" [alt]="slide.caption" [title]="slide.caption">
+
+      <div class="caption">{{ slide.caption }}</div>
     </div>
 
-    <div class="slide fade">
-      <img src="assets/images/decor.jpg" alt="Décor Category" />
-      <div class="caption">Décor</div>
-    </div>
-
-    <div class="slide fade">
-      <img src="assets/images/essentials.jpg" alt="Home Essentials Category" />
-      <div class="caption">Essentials</div>
-    </div>
-
+    <!-- Optional navigation arrows -->
+    <button class="prev" (click)="prevSlide()" aria-label="Previous slide">&#10094;</button>
+    <button class="next" (click)="nextSlide()" aria-label="Next slide">&#10095;</button>
   </div>
 </section>

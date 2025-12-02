@@ -6,57 +6,61 @@ import { catchError } from 'rxjs/operators';
 // Interface for login response
 interface LoginResponse {
   message: string;
-  role?: string;  // your backend returns role
-  user?: any;     // user object
+  role?: string;
+  user?: any;
+  token?: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://127.0.0.1:5000/api/users'; // Flask backend URL
+
+  private apiUrl = 'http://127.0.0.1:5000/api/users'; // Flask backend
 
   constructor(private http: HttpClient) {}
 
-  // Customer login
-  login(email: string, password: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/login`, { email, password })
+  // CUSTOMER LOGIN
+  login(email: string, password: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { email, password })
       .pipe(catchError(this.handleError));
   }
 
-  // Customer signup
+  // CUSTOMER SIGNUP
   signup(data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/signup`, data)
       .pipe(catchError(this.handleError));
   }
 
-  // Optional: Admin login
+  // ADMIN LOGIN
   adminLogin(email: string, password: string): Observable<LoginResponse> {
-    const payload = { email, password };
-    return this.http.post<LoginResponse>(`${this.apiUrl}/admin/login`, payload)
+    return this.http.post<LoginResponse>(`${this.apiUrl}/admin/login`, { email, password })
       .pipe(catchError(this.handleError));
   }
 
-  // Optional: Admin registration
+  // ADMIN REGISTRATION (OPTIONAL)
   registerAdmin(data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/admin/register`, data)
       .pipe(catchError(this.handleError));
   }
 
-  // Error handler
+
+  // ERROR HANDLING
   private handleError(error: any) {
     let errorMsg = 'An unknown error occurred';
 
     if (error instanceof HttpErrorResponse) {
       if (error.error && error.error.error) {
-        // Backend sends { error: "message" }
         errorMsg = error.error.error;
-      } else if (error.error && error.error.message) {
+      }
+      else if (error.error && error.error.message) {
         errorMsg = error.error.message;
-      } else {
+      }
+      else {
         errorMsg = `Server returned code ${error.status}`;
       }
-    } else if (error && error.message) {
+    }
+    else if (error && error.message) {
       errorMsg = error.message;
     }
 
