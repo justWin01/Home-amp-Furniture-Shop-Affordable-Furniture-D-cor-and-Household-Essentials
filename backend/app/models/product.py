@@ -10,7 +10,7 @@ class Product(db.Model):
     price = db.Column(db.Numeric(10,2), nullable=False)
     stock_quantity = db.Column(db.Integer, default=0)
     image = db.Column(db.String(255))
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.category_id'))
+    category_id = db.Column(db.Integer,db.ForeignKey('categories.category_id'))
 
     # RELATIONSHIPS
     order_details = db.relationship('OrderDetails', backref='product', lazy=True)

@@ -12,12 +12,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  // Customer login
+
+  // ================= CUSTOMER LOGIN =================
   email = '';
   password = '';
   message = '';
 
-  // Sign Up modal
+  // ================= SIGN UP MODAL =================
   isSignUpOpen = false;
   signupName = '';
   signupEmail = '';
@@ -26,57 +27,71 @@ export class LoginComponent {
   signupAddress = '';
   signUpMessage = '';
 
-  // Admin login modal
-  isAdminLoginOpen = false;
+  // ================= ADMIN MODAL =================
+  isAdminModalOpen = false;
+  adminMode: 'login' | 'register' = 'login';
+
+  // Admin Login fields
   adminEmail = '';
   adminPassword = '';
   adminMessage = '';
 
+  // Admin Register fields
+  adminRegisterName = '';
+  adminRegisterEmail = '';
+  adminRegisterPassword = '';
+  adminRegisterMessage = '';
+
   constructor(private userService: UserService, private router: Router) {}
+
+  // ================= HELPER =================
+  private showMessage(
+    field: 'message' | 'signUpMessage' | 'adminMessage' | 'adminRegisterMessage',
+    text: string,
+    timeout: number = 5000
+  ) {
+    (this as any)[field] = text;
+    setTimeout(() => (this as any)[field] = '', timeout);
+  }
+
+  private resetAdminFields() {
+    this.adminEmail = '';
+    this.adminPassword = '';
+    this.adminMessage = '';
+    this.adminRegisterName = '';
+    this.adminRegisterEmail = '';
+    this.adminRegisterPassword = '';
+    this.adminRegisterMessage = '';
+  }
 
   // ================= CUSTOMER LOGIN =================
   onLogin() {
     if (!this.email || !this.password) {
-      this.message = 'Please enter email and password';
+      this.showMessage('message', 'Please enter email and password');
       return;
     }
 
     this.userService.login(this.email, this.password).subscribe({
       next: (res: any) => {
-        this.message = 'Login successful!';
-        setTimeout(() => (this.message = ''), 5000);
-
+        this.showMessage('message', 'Login successful!');
         if (res.token) localStorage.setItem('token', res.token);
-
-        // Redirect directly to customer dashboard
         this.router.navigate(['/customer/dashboard']);
       },
-      error: (err: any) => {
-        this.message = 'Login failed: ' + (err.error?.message || err.message);
-        setTimeout(() => (this.message = ''), 5000);
-      }
+      error: (err: any) => this.showMessage('message', 'Login failed: ' + (err.error?.message || err.message))
     });
   }
 
-
   // ================= SIGN UP =================
-  openSignUpModal() {
-    this.isSignUpOpen = true;
-  }
-
-  closeSignUpModal() {
-    this.isSignUpOpen = false;
-    this.signUpMessage = '';
-  }
+  openSignUpModal() { this.isSignUpOpen = true; }
+  closeSignUpModal() { this.isSignUpOpen = false; this.signUpMessage = ''; }
 
   onSignUp() {
-    if (!this.signupName || !this.signupEmail || !this.signupPassword ||
-        !this.signupContact || !this.signupAddress) {
-      this.signUpMessage = 'Please fill all fields';
+    if (!this.signupName || !this.signupEmail || !this.signupPassword || !this.signupContact || !this.signupAddress) {
+      this.showMessage('signUpMessage', 'Please fill all fields');
       return;
     }
 
-    const signupData = {
+    const data = {
       full_name: this.signupName,
       email: this.signupEmail,
       password: this.signupPassword,
@@ -84,14 +99,9 @@ export class LoginComponent {
       address: this.signupAddress
     };
 
-    this.userService.signup(signupData).subscribe({
-      next: (res: any) => {
-        this.signUpMessage = 'Sign Up successful! You can now log in.';
-        setTimeout(() => this.closeSignUpModal(), 2000);
-      },
-      error: (err: any) => {
-        this.signUpMessage = 'Sign Up failed: ' + (err.error?.message || err.message);
-      }
+    this.userService.signup(data).subscribe({
+      next: () => this.showMessage('signUpMessage', 'Sign Up successful! You can now log in.', 2000),
+      error: (err: any) => this.showMessage('signUpMessage', 'Sign Up failed: ' + (err.error?.message || err.message))
     });
   }
 
@@ -100,38 +110,57 @@ export class LoginComponent {
     this.router.navigate(['/forgot-password']);
   }
 
+  // ================= ADMIN MODAL =================
+  openAdminModal(mode: 'login' | 'register' = 'login') {
+    this.isAdminModalOpen = true;
+    this.adminMode = mode;
+    this.resetAdminFields();
+  }
+
+  closeAdminModal() {
+    this.isAdminModalOpen = false;
+    this.resetAdminFields();
+  }
+
+  toggleAdminMode() {
+    this.adminMode = this.adminMode === 'login' ? 'register' : 'login';
+    this.resetAdminFields();
+  }
+
   // ================= ADMIN LOGIN =================
-  openAdminLoginModal() {
-    this.isAdminLoginOpen = true;
-  }
-
-  closeAdminLoginModal() {
-    this.isAdminLoginOpen = false;
-    this.adminMessage = '';
-  }
-
   onAdminLogin() {
     if (!this.adminEmail || !this.adminPassword) {
-      this.adminMessage = 'Please enter admin email and password';
+      this.showMessage('adminMessage', 'Please enter admin email and password');
       return;
     }
 
     this.userService.adminLogin(this.adminEmail, this.adminPassword).subscribe({
       next: (res: any) => {
-        this.adminMessage = 'Admin login successful!';
-        setTimeout(() => {
-          this.adminMessage = '';
-          this.closeAdminLoginModal();
-        }, 1500);
-
+        this.showMessage('adminMessage', 'Admin login successful!', 1500);
         if (res.token) localStorage.setItem('admin_token', res.token);
-
+        this.closeAdminModal();
         this.router.navigate(['/admin/dashboard']);
       },
-      error: (err: any) => {
-        this.adminMessage = 'Admin login failed: ' + (err.error?.message || err.message);
-        setTimeout(() => (this.adminMessage = ''), 5000);
-      }
+      error: (err: any) => this.showMessage('adminMessage', 'Admin login failed: ' + (err.error?.message || err.message))
+    });
+  }
+
+  // ================= ADMIN REGISTRATION =================
+  onAdminRegister() {
+    if (!this.adminRegisterName || !this.adminRegisterEmail || !this.adminRegisterPassword) {
+      this.showMessage('adminRegisterMessage', 'Please fill all fields');
+      return;
+    }
+
+    const data = {
+      full_name: this.adminRegisterName,
+      email: this.adminRegisterEmail,
+      password: this.adminRegisterPassword
+    };
+
+    this.userService.registerAdmin(data).subscribe({
+      next: () => this.showMessage('adminRegisterMessage', 'Admin registered successfully!', 2000),
+      error: (err: any) => this.showMessage('adminRegisterMessage', 'Registration failed: ' + (err.error?.message || err.message))
     });
   }
 }

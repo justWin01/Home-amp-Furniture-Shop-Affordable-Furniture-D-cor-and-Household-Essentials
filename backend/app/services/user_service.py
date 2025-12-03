@@ -69,8 +69,6 @@ class UserService:
         return {"message": "Login successful", "role": user.role, "user": user.to_dict()}, 200
 
 
-
-
     # ======================
     # LOGIN ADMIN ONLY
     # ======================
@@ -84,7 +82,7 @@ class UserService:
 
         user = User.query.filter_by(email=email).first()
         if not user or not check_password_hash(user.password, password):
-            return {"error": "Invalid credentials"}, 401
+            return {"error": "Invaljid credentials"}, 401
 
         # Admins only
         if user.role != 'Admin':

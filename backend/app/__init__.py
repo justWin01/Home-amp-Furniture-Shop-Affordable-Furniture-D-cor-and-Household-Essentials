@@ -27,8 +27,8 @@ def create_app():
             "endpoints": {
                 "get_all_users": "/api/users - List of all users",
                 "get_user_by_id": "/api/users/<id> - Get specific user",
-                "register_user": {
-                    "endpoint": "/api/users/register",
+                "/signup_user": {
+                    "endpoint": "/api/users/signup",
                     "method": "POST",
                     "body": {
                         "full_name": "",
@@ -50,7 +50,7 @@ def create_app():
                     "endpoint": "/api/users/<id>",
                     "method": "PUT",
                     "body": {
-                        "name": "",
+                        "full_name": "",
                         "email": "",
                         "password": ""
                     }
