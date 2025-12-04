@@ -11,10 +11,11 @@ import { CommonModule } from '@angular/common';
 export class HomeComponent implements OnInit, OnDestroy {
 
   slides = [
-    { image: 'images/decor.jpg', caption: 'Decor Collection' },
-    { image: 'images/essentials.jpg', caption: 'Home Essentials' },
-    { image: 'images/furniture.png', caption: 'Premium Furniture' }
+    { image: 'assets/images/decor.jpg', title: 'Decor' },
+    { image: 'assets/images/essentials.jpg', title: 'Essentials' },
+    { image: 'assets/images/furniture.png', title: 'Furniture' },
   ];
+
 
 
   currentSlide = 0;

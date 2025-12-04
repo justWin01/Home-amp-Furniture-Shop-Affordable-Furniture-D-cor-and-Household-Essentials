@@ -11,10 +11,10 @@
             [attr.aria-hidden]="i === currentSlide ? 'false' : 'true'">
 
       <img [src]="slide.image"
-           [alt]="slide.caption"
-           [title]="slide.caption">
+           [alt]="slide.title"
+           [title]="slide.title">
 
-      <figcaption class="caption">{{ slide.caption }}</figcaption>
+      <figcaption class="caption">{{ slide.title }}</figcaption>
     </figure>
 
     <!-- Semantic Navigation -->
