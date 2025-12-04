@@ -1,23 +1,23 @@
 <section class="slider-container"
-         aria-label="Image Slider"
+         aria-label="Furniture Slider"
          (mouseenter)="pauseSlider()"
          (mouseleave)="resumeSlider()">
 
   <div class="slider">
 
-    <figure *ngFor="let slide of slides; let i = index"
-            class="slide fade"
-            [class.active]="i === currentSlide"
-            [attr.aria-hidden]="i === currentSlide ? 'false' : 'true'">
+    <div *ngFor="let slide of slides; let i = index"
+         class="slide"
+         [class.active]="i === currentSlide"
+         [style.background]="slide.color">
 
-      <img [src]="slide.image"
-           [alt]="slide.title"
-           [title]="slide.title">
+      <div class="slide-content">
+        <span class="category">{{ slide.category }}</span>
+        <h2>{{ slide.title }}</h2>
+      </div>
 
-      <figcaption class="caption">{{ slide.title }}</figcaption>
-    </figure>
+    </div>
 
-    <!-- Semantic Navigation -->
+    <!-- Navigation -->
     <nav class="slider-navigation" aria-label="Slider Controls">
       <button class="prev" (click)="prevSlide()" aria-label="Previous Slide">&#10094;</button>
       <button class="next" (click)="nextSlide()" aria-label="Next Slide">&#10095;</button>
