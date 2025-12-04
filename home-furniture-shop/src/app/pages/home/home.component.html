@@ -1,20 +1,27 @@
 <section class="slider-container"
+         aria-label="Image Slider"
          (mouseenter)="pauseSlider()"
          (mouseleave)="resumeSlider()">
 
   <div class="slider">
-    <div *ngFor="let slide of slides; let i = index"
-         class="slide fade"
-         [class.active]="i === currentSlide"
-         [attr.aria-hidden]="i === currentSlide ? 'false' : 'true'">
 
-      <img [src]="slide.image" [alt]="slide.caption" [title]="slide.caption">
+    <figure *ngFor="let slide of slides; let i = index"
+            class="slide fade"
+            [class.active]="i === currentSlide"
+            [attr.aria-hidden]="i === currentSlide ? 'false' : 'true'">
 
-      <div class="caption">{{ slide.caption }}</div>
-    </div>
+      <img [src]="slide.image"
+           [alt]="slide.caption"
+           [title]="slide.caption">
 
-    <!-- Optional navigation arrows -->
-    <button class="prev" (click)="prevSlide()" aria-label="Previous slide">&#10094;</button>
-    <button class="next" (click)="nextSlide()" aria-label="Next slide">&#10095;</button>
+      <figcaption class="caption">{{ slide.caption }}</figcaption>
+    </figure>
+
+    <!-- Semantic Navigation -->
+    <nav class="slider-navigation" aria-label="Slider Controls">
+      <button class="prev" (click)="prevSlide()" aria-label="Previous Slide">&#10094;</button>
+      <button class="next" (click)="nextSlide()" aria-label="Next Slide">&#10095;</button>
+    </nav>
+
   </div>
 </section>

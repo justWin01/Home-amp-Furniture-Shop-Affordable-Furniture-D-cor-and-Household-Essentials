@@ -81,9 +81,13 @@ export class LoginComponent {
     });
   }
 
-  // ================= SIGN UP =================
+  // ================= SIGN UP CUSTOMER =================
   openSignUpModal() { this.isSignUpOpen = true; }
   closeSignUpModal() { this.isSignUpOpen = false; this.signUpMessage = ''; }
+
+
+
+
 
   onSignUp() {
     if (!this.signupName || !this.signupEmail || !this.signupPassword || !this.signupContact || !this.signupAddress) {
@@ -157,10 +161,5 @@ export class LoginComponent {
       email: this.adminRegisterEmail,
       password: this.adminRegisterPassword
     };
-
-    this.userService.registerAdmin(data).subscribe({
-      next: () => this.showMessage('adminRegisterMessage', 'Admin registered successfully!', 2000),
-      error: (err: any) => this.showMessage('adminRegisterMessage', 'Registration failed: ' + (err.error?.message || err.message))
-    });
   }
 }

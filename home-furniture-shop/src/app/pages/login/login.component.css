@@ -76,7 +76,7 @@ button:hover { opacity: 0.85; }
 
 /* Messages */
 .message {
-  color: rgb(202, 161, 13);
+  color: rgb(255, 0, 0);
   font-size: 0.9rem;
   text-align: center;
   opacity: 0;
@@ -141,23 +141,6 @@ button:hover { opacity: 0.85; }
 }
 
 .close-btn:hove r { color: #ff4d4d; }
-
-/* Admin Modal Toggle Link */
-.toggle-link {
-  text-align: center;
-  margin-top: 10px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  color: #007bff; /* blue color */
-  font-weight: 600;
-  transition: 0.2s;
-}
-
-.toggle-link:hover {
-  color: #0056b3; /* darker blue on hover */
-  text-decoration: underline;
-}
-
 
 /* Animations */
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }

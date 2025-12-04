@@ -38,13 +38,6 @@ export class UserService {
       .pipe(catchError(this.handleError));
   }
 
-  // ADMIN REGISTRATION (OPTIONAL)
-  registerAdmin(data: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/admin/register`, data)
-      .pipe(catchError(this.handleError));
-  }
-
-
 
   // ERROR HANDLING
   private handleError(error: any) {

@@ -50,7 +50,6 @@
       <input type="password" [(ngModel)]="adminPassword" placeholder="Password" />
       <button (click)="onAdminLogin()">Login</button>
       <p class="message" [class.fade-in]="adminMessage">{{ adminMessage }}</p>
-      <p class="toggle-link" (click)="toggleAdminMode()">Don't have an account? Register</p>
     </ng-container>
 
     <!-- Admin Register -->
@@ -60,7 +59,6 @@
       <input type="password" [(ngModel)]="adminRegisterPassword" placeholder="Password" />
       <button (click)="onAdminRegister()">Register</button>
       <p class="message" [class.fade-in]="adminRegisterMessage">{{ adminRegisterMessage }}</p>
-      <p class="toggle-link" (click)="toggleAdminMode()">Already have an account? Login</p>
     </ng-container>
 
     <button class="close-btn" (click)="closeAdminModal()">X</button>

@@ -1,46 +1,53 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule],   // <-- REQUIRED for *ngFor
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
+
   slides = [
-    { image: 'assets/images/furniture.jpg', caption: 'Wooden furniture collection' },
-    { image: 'assets/images/decor.jpg', caption: 'Home décor items' },
-    { image: 'assets/images/essentials.jpg', caption: 'Home essentials' }
+    { image: 'images/decor.jpg', caption: 'Decor Collection' },
+    { image: 'images/essentials.jpg', caption: 'Home Essentials' },
+    { image: 'images/furniture.png', caption: 'Premium Furniture' }
   ];
 
+
   currentSlide = 0;
-  slideInterval: any;
+  private intervalId: any;
 
-  ngOnInit() {
-    this.startSlider();
+  ngOnInit(): void {
+    this.startAutoSlide();
   }
 
-  startSlider() {
-    this.slideInterval = setInterval(() => {
-      this.currentSlide = (this.currentSlide + 1) % this.slides.length;
-    }, 3000); // change image every 3 seconds
+  ngOnDestroy(): void {
+    this.pauseSlider();
   }
 
-  pauseSlider() {
-    clearInterval(this.slideInterval);
+  startAutoSlide(): void {
+    this.intervalId = setInterval(() => {
+      this.nextSlide();
+    }, 3000);
   }
 
-  resumeSlider() {
-    this.startSlider();
+  pauseSlider(): void {
+    clearInterval(this.intervalId);
   }
 
-  prevSlide() {
-    this.currentSlide = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
+  resumeSlider(): void {
+    this.startAutoSlide();
   }
 
-  nextSlide() {
+  nextSlide(): void {
     this.currentSlide = (this.currentSlide + 1) % this.slides.length;
+  }
+
+  prevSlide(): void {
+    this.currentSlide =
+      (this.currentSlide - 1 + this.slides.length) % this.slides.length;
   }
 }
