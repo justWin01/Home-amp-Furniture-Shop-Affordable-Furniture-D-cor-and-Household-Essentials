@@ -12,8 +12,6 @@
     <!-- Admin Button -->
     <button class="admin-btn" (click)="openAdminModal('login')">Admin</button>
 
-    <p class="message" [class.fade-in]="message">{{ message }}</p>
-
     <p class="signup-text">
       Don't have an account?
       <span class="signup-link" (click)="openSignUpModal()">Sign Up</span>
@@ -33,7 +31,6 @@
     <input type="text" [(ngModel)]="signupAddress" placeholder="Address" />
 
     <button (click)="onSignUp()">Sign Up</button>
-    <p class="message" [class.fade-in]="signUpMessage">{{ signUpMessage }}</p>
 
     <button class="close-btn" (click)="closeSignUpModal()">X</button>
   </div>
@@ -49,16 +46,6 @@
       <input type="email" [(ngModel)]="adminEmail" placeholder="Email" />
       <input type="password" [(ngModel)]="adminPassword" placeholder="Password" />
       <button (click)="onAdminLogin()">Login</button>
-      <p class="message" [class.fade-in]="adminMessage">{{ adminMessage }}</p>
-    </ng-container>
-
-    <!-- Admin Register -->
-    <ng-container *ngIf="adminMode === 'register'">
-      <input type="text" [(ngModel)]="adminRegisterName" placeholder="Full Name" />
-      <input type="email" [(ngModel)]="adminRegisterEmail" placeholder="Email" />
-      <input type="password" [(ngModel)]="adminRegisterPassword" placeholder="Password" />
-      <button (click)="onAdminRegister()">Register</button>
-      <p class="message" [class.fade-in]="adminRegisterMessage">{{ adminRegisterMessage }}</p>
     </ng-container>
 
     <button class="close-btn" (click)="closeAdminModal()">X</button>

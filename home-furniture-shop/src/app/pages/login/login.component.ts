@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -13,85 +14,84 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
 
-  // ================= CUSTOMER LOGIN =================
+  // CUSTOMER LOGIN
   email = '';
   password = '';
-  message = '';
 
-  // ================= SIGN UP MODAL =================
+  // SIGN UP MODAL
   isSignUpOpen = false;
   signupName = '';
   signupEmail = '';
   signupPassword = '';
   signupContact = '';
   signupAddress = '';
-  signUpMessage = '';
 
-  // ================= ADMIN MODAL =================
+  // ADMIN MODAL
   isAdminModalOpen = false;
   adminMode: 'login' | 'register' = 'login';
 
-  // Admin Login fields
   adminEmail = '';
   adminPassword = '';
-  adminMessage = '';
 
-  // Admin Register fields
   adminRegisterName = '';
   adminRegisterEmail = '';
   adminRegisterPassword = '';
-  adminRegisterMessage = '';
 
   constructor(private userService: UserService, private router: Router) {}
 
-  // ================= HELPER =================
-  private showMessage(
-    field: 'message' | 'signUpMessage' | 'adminMessage' | 'adminRegisterMessage',
-    text: string,
-    timeout: number = 5000
-  ) {
-    (this as any)[field] = text;
-    setTimeout(() => (this as any)[field] = '', timeout);
-  }
-
+  // RESET ADMIN FIELDS
   private resetAdminFields() {
     this.adminEmail = '';
     this.adminPassword = '';
-    this.adminMessage = '';
     this.adminRegisterName = '';
     this.adminRegisterEmail = '';
     this.adminRegisterPassword = '';
-    this.adminRegisterMessage = '';
   }
 
-  // ================= CUSTOMER LOGIN =================
+  // ====================== CUSTOMER LOGIN ======================
   onLogin() {
     if (!this.email || !this.password) {
-      this.showMessage('message', 'Please enter email and password');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Fields',
+        text: 'Please enter email and password.',
+      });
       return;
     }
 
     this.userService.login(this.email, this.password).subscribe({
       next: (res: any) => {
-        this.showMessage('message', 'Login successful!');
+        Swal.fire({
+          icon: 'success',
+          title: 'Login Successful!',
+          timer: 1500,
+          showConfirmButton: false
+        });
+
         if (res.token) localStorage.setItem('token', res.token);
         this.router.navigate(['/customer/dashboard']);
       },
-      error: (err: any) => this.showMessage('message', 'Login failed: ' + (err.error?.message || err.message))
+      error: (err: any) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Login Failed',
+          text: err.error?.message || err.message,
+        });
+      }
     });
   }
 
-  // ================= SIGN UP CUSTOMER =================
+  // ====================== CUSTOMER SIGN UP ======================
   openSignUpModal() { this.isSignUpOpen = true; }
-  closeSignUpModal() { this.isSignUpOpen = false; this.signUpMessage = ''; }
-
-
-
-
+  closeSignUpModal() { this.isSignUpOpen = false; }
 
   onSignUp() {
     if (!this.signupName || !this.signupEmail || !this.signupPassword || !this.signupContact || !this.signupAddress) {
-      this.showMessage('signUpMessage', 'Please fill all fields');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Incomplete Fields',
+        text: 'Please fill all fields.',
+      });
       return;
     }
 
@@ -104,17 +104,30 @@ export class LoginComponent {
     };
 
     this.userService.signup(data).subscribe({
-      next: () => this.showMessage('signUpMessage', 'Sign Up successful! You can now log in.', 2000),
-      error: (err: any) => this.showMessage('signUpMessage', 'Sign Up failed: ' + (err.error?.message || err.message))
+      next: () => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Account Created!',
+          text: 'You can now log in.',
+        });
+        this.closeSignUpModal();
+      },
+      error: (err: any) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Sign Up Failed',
+          text: err.error?.message || err.message
+        });
+      }
     });
   }
 
-  // ================= FORGOT PASSWORD =================
+  // ====================== FORGOT PASSWORD ======================
   openForgotPassword() {
     this.router.navigate(['/forgot-password']);
   }
 
-  // ================= ADMIN MODAL =================
+  // ====================== ADMIN MODAL ======================
   openAdminModal(mode: 'login' | 'register' = 'login') {
     this.isAdminModalOpen = true;
     this.adminMode = mode;
@@ -131,28 +144,49 @@ export class LoginComponent {
     this.resetAdminFields();
   }
 
-  // ================= ADMIN LOGIN =================
+  // ====================== ADMIN LOGIN ======================
   onAdminLogin() {
     if (!this.adminEmail || !this.adminPassword) {
-      this.showMessage('adminMessage', 'Please enter admin email and password');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Fields',
+        text: 'Please enter admin email and password.',
+      });
       return;
     }
 
     this.userService.adminLogin(this.adminEmail, this.adminPassword).subscribe({
       next: (res: any) => {
-        this.showMessage('adminMessage', 'Admin login successful!', 1500);
+        Swal.fire({
+          icon: 'success',
+          title: 'Admin Login Successful!',
+          timer: 1500,
+          showConfirmButton: false
+        });
+
         if (res.token) localStorage.setItem('admin_token', res.token);
+
         this.closeAdminModal();
         this.router.navigate(['/admin/dashboard']);
       },
-      error: (err: any) => this.showMessage('adminMessage', 'Admin login failed: ' + (err.error?.message || err.message))
+      error: (err: any) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Admin Login Failed',
+          text: err.error?.message || err.message
+        });
+      }
     });
   }
 
-  // ================= ADMIN REGISTRATION =================
+  // ====================== ADMIN REGISTER ======================
   onAdminRegister() {
     if (!this.adminRegisterName || !this.adminRegisterEmail || !this.adminRegisterPassword) {
-      this.showMessage('adminRegisterMessage', 'Please fill all fields');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Fields',
+        text: 'Please fill all fields.',
+      });
       return;
     }
 
@@ -161,5 +195,7 @@ export class LoginComponent {
       email: this.adminRegisterEmail,
       password: this.adminRegisterPassword
     };
+
+
   }
 }
