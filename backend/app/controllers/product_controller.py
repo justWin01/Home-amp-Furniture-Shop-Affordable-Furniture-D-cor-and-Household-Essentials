@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, current_app
 from werkzeug.utils import secure_filename
 import os
 from app.services.product_service import ProductService
@@ -15,62 +15,97 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 @product_bp.route("/", methods=["GET"])
 def get_products():
     products = ProductService.get_all_products()
-    return jsonify([p.to_dict() for p in products])
+    return jsonify([p.to_dict() for p in products]), 200
 
 # ----------------------------
 # GET PRODUCT BY ID
 # ----------------------------
 @product_bp.route("/<int:product_id>", methods=["GET"])
 def get_product(product_id):
-    p = ProductService.get_product_by_id(product_id)
-    return jsonify(p.to_dict())
+    product = ProductService.get_product_by_id(product_id)
+    return jsonify(product.to_dict()), 200
 
 # ----------------------------
-# CREATE PRODUCT (JSON or Form + Image)
+# CREATE PRODUCT
 # ----------------------------
 @product_bp.route("/", methods=["POST"])
 def create_product():
-    # Check if request has JSON or form-data
-    if request.is_json:
-        data = request.get_json()
-        file = None
-        filename = None
-    else:
-        data = request.form.to_dict()
-        file = request.files.get("image")
-        filename = None
-        if file:
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(UPLOAD_FOLDER, filename))
+    try:
+        # JSON or Form-data
+        if request.is_json:
+            data = request.get_json()
+            file = None
+            filename = None
+        else:
+            data = request.form.to_dict()
+            file = request.files.get("image")
+            filename = None
+            if file:
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(UPLOAD_FOLDER, filename))
 
-    # Create product using service
-    ProductService.create_product(data, image_filename=filename)
-    return jsonify({"message": "Product created"}), 201
+        # Create product
+        result = ProductService.create_product(data, image_filename=filename)
+
+        # Check if duplicate error returned
+        if isinstance(result, tuple):
+            return jsonify(result[0]), result[1]
+
+        return jsonify({
+            "status": "success",
+            "message": "Product created successfully",
+            "product": result.to_dict()
+        }), 201
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 # ----------------------------
-# UPDATE PRODUCT (JSON or Form + Image)
+# UPDATE PRODUCT
 # ----------------------------
 @product_bp.route("/<int:product_id>", methods=["PUT"])
 def update_product(product_id):
-    if request.is_json:
-        data = request.get_json()
-        file = None
-        filename = None
-    else:
-        data = request.form.to_dict()
-        file = request.files.get("image")
-        filename = None
-        if file:
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(UPLOAD_FOLDER, filename))
+    try:
+        if request.is_json:
+            data = request.get_json()
+            file = None
+            filename = None
+        else:
+            data = request.form.to_dict()
+            file = request.files.get("image")
+            filename = None
+            if file:
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(UPLOAD_FOLDER, filename))
 
-    ProductService.update_product(product_id, data, image_filename=filename)
-    return jsonify({"message": "Product updated"})
+        result = ProductService.update_product(product_id, data, image_filename=filename)
+
+        # Check if duplicate error returned
+        if isinstance(result, tuple):
+            return jsonify(result[0]), result[1]
+
+        return jsonify({
+            "status": "success",
+            "message": "Product updated successfully",
+            "product": result.to_dict()
+        }), 200
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 # ----------------------------
 # DELETE PRODUCT
 # ----------------------------
 @product_bp.route("/<int:product_id>", methods=["DELETE"])
 def delete_product(product_id):
-    ProductService.delete_product(product_id)
-    return jsonify({"message": "Product deleted"})
+    try:
+        result = ProductService.delete_product(product_id)
+
+        # Check if error returned
+        if isinstance(result, tuple):
+            return jsonify(result[0]), result[1]
+
+        return jsonify({"status": "success", "message": "Product deleted successfully"}), 200
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500

@@ -1,5 +1,6 @@
 from extensions import db
 from app.models.product import Product
+from sqlalchemy.exc import IntegrityError
 
 class ProductService:
 
@@ -22,22 +23,29 @@ class ProductService:
     # ======================
     @staticmethod
     def create_product(data, image_filename=None):
-        # Safely convert fields to proper types
+
+        # ----- DUPLICATE NAME CHECK -----
+        existing = Product.query.filter_by(product_name=data.get("product_name")).first()
+        if existing:
+            return {"error": "Product name already exists"}, 400
+
+        # Safe conversions
         try:
-            price = float(data.get("price", 0)) if data.get("price") is not None else 0.0
+            price = float(data.get("price", 0) or 0)
         except ValueError:
             price = 0.0
 
         try:
-            stock_quantity = int(data.get("stock_quantity", 0)) if data.get("stock_quantity") is not None else 0
+            stock_quantity = int(data.get("stock_quantity", 0) or 0)
         except ValueError:
             stock_quantity = 0
 
         try:
-            category_id = int(data.get("category_id")) if data.get("category_id") is not None else None
+            category_id = int(data.get("category_id")) if data.get("category_id") else None
         except ValueError:
             category_id = None
 
+        # Create product object
         product = Product(
             product_name=data.get("product_name"),
             price=price,
@@ -46,8 +54,16 @@ class ProductService:
             category_id=category_id,
             image=image_filename
         )
+
         db.session.add(product)
-        db.session.commit()
+
+        # Database commit handling
+        try:
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            return {"error": "Failed to create product."}, 500
+
         return product
 
     # ======================
@@ -55,22 +71,31 @@ class ProductService:
     # ======================
     @staticmethod
     def update_product(product_id, data, image_filename=None):
+
         product = Product.query.get_or_404(product_id)
 
-        if data.get("product_name"):
-            product.product_name = data["product_name"]
+        # ----- DUPLICATE NAME CHECK -----
+        new_name = data.get("product_name")
+        if new_name and new_name != product.product_name:
+            existing = Product.query.filter_by(product_name=new_name).first()
+            if existing:
+                return {"error": "Product name already exists"}, 400
+
+        # Update fields
+        if new_name:
+            product.product_name = new_name
 
         if data.get("price") is not None:
             try:
                 product.price = float(data["price"])
             except ValueError:
-                pass  # keep old price if conversion fails
+                pass
 
         if data.get("stock_quantity") is not None:
             try:
                 product.stock_quantity = int(data["stock_quantity"])
             except ValueError:
-                pass  # keep old stock_quantity if conversion fails
+                pass
 
         if data.get("description"):
             product.description = data["description"]
@@ -84,7 +109,13 @@ class ProductService:
         if image_filename:
             product.image = image_filename
 
-        db.session.commit()
+        # Commit changes
+        try:
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            return {"error": "Failed to update product."}, 500
+
         return product
 
     # ======================
@@ -93,6 +124,13 @@ class ProductService:
     @staticmethod
     def delete_product(product_id):
         product = Product.query.get_or_404(product_id)
+
         db.session.delete(product)
-        db.session.commit()
+
+        try:
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            return {"error": "Failed to delete product."}, 500
+
         return True
