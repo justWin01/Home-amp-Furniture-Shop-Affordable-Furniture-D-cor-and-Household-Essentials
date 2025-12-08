@@ -1,0 +1,154 @@
+.customer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 45px;
+  background: linear-gradient(90deg, #d4b100, #b89000);
+  color: #000;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 100;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.site-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-actions input {
+  padding: 7px 12px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  background: #f2f2f2;
+  font-size: 0.95rem;
+  transition: box-shadow 0.2s;
+}
+
+.header-actions input:focus {
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.5);
+}
+
+.menu-btn {
+  font-size: 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.menu-btn:hover {
+  color: #ffd700;
+}
+
+/* Sliding menu */
+.customer-nav {
+  position: fixed;
+  top: 0;
+  right: -280px;
+  width: 280px;
+  height: 100%;
+  background-color: #fff;
+  box-shadow: -2px 0 12px rgba(0,0,0,0.2);
+  transition: right 0.35s ease;
+  padding: 20px;
+  z-index: 999;
+}
+
+.customer-nav.active {
+  right: 0;
+}
+
+.customer-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.customer-nav li {
+  margin-bottom: 20px;
+}
+
+.customer-nav a {
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.customer-nav a:hover {
+  color: #ffd700;
+}
+
+.profile-menu .profile-dropdown {
+  display: none;
+  margin-top: 8px;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.profile-menu .profile-dropdown.active {
+  display: block;
+}
+
+.profile-dropdown p {
+  margin: 5px 0;
+}
+
+.profile-dropdown a {
+  display: block;
+  margin: 5px 0;
+}
+
+.profile-dropdown button {
+  margin-top: 10px;
+  padding: 6px 12px;
+  border: none;
+  background: #e74c3c;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Icons inside menu */
+.icon {
+  font-size: 1.2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header-actions input {
+    width: 150px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .customer-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .header-actions input {
+    flex: 1;
+  }
+}

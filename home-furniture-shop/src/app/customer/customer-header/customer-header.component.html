@@ -1,7 +1,43 @@
-<nav class="customer-nav">
-  <a routerLink="/customer/homecustomer">Home</a>
-  <a routerLink="/customer/orders">Orders</a>
-  <a routerLink="/customer/profile">Profile</a>
+<header class="customer-header">
+  <div class="header-left">
+    <figure class="logo-container">
+      <img src="assets/images/logo.png" alt="Home & Furniture Logo" width="60" height="60" />
+    </figure>
+    <h1 class="site-title">Home & Furniture Shop</h1>
+  </div>
 
-  <button (click)="logout()">Logout</button>
-</nav>
+  <div class="header-actions">
+    <label for="customer-search" class="visually-hidden">Search products</label>
+    <input id="customer-search" type="search" placeholder="Search products..." />
+
+    <!-- Menu button -->
+    <button class="menu-btn" (click)="toggleMenu()">☰ Menu</button>
+  </div>
+
+  <!-- Sliding Menu -->
+  <nav class="customer-nav" [class.active]="menuActive">
+    <ul>
+      <li>
+        <a routerLink="/customer/homecustomer">
+          <span class="icon">🏠</span> Home
+        </a>
+      </li>
+      <li>
+        <a routerLink="/customer/orders">
+          <span class="icon">🛒</span> Orders
+        </a>
+      </li>
+      <li class="profile-menu">
+        <a (click)="toggleProfile()">
+          <span class="icon">👤</span> Profile ▼
+        </a>
+        <div class="profile-dropdown" [class.active]="profileActive">
+          <p><strong>{{ user.fullname }}</strong></p>
+          <p>{{ user.address }}</p>
+          <a routerLink="/customer/profile">Edit Profile</a>
+          <button (click)="logout()">Logout</button>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>

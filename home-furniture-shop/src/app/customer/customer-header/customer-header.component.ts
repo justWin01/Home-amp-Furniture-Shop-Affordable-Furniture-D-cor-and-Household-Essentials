@@ -1,24 +1,37 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';   // ✅ Required for *ngIf, *ngFor etc.
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-customer-header',
   standalone: true,
-  imports: [CommonModule],    // ⬅️ MUST ADD THIS
+  imports: [CommonModule],
   templateUrl: './customer-header.component.html',
   styleUrls: ['./customer-header.component.css']
 })
 export class CustomerHeaderComponent {
 
+  menuActive: boolean = false;
+  profileActive: boolean = false;
+
+  user = {
+    fullname: 'John Doe',
+    address: '123 Main St, City'
+  };
+
   constructor(private router: Router) {}
 
-  logout() {
-    // remove token
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');   // Optional but recommended
+  toggleMenu() {
+    this.menuActive = !this.menuActive;
+  }
 
-    // redirect to login page
+  toggleProfile() {
+    this.profileActive = !this.profileActive;
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
     this.router.navigate(['/login']);
   }
 }
