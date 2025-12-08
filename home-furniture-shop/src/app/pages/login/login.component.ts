@@ -69,7 +69,7 @@ export class LoginComponent {
         });
 
         if (res.token) localStorage.setItem('token', res.token);
-        this.router.navigate(['/customer/dashboard']);
+        this.router.navigate(['/customer/homecustomer']);
       },
       error: (err: any) => {
         Swal.fire({

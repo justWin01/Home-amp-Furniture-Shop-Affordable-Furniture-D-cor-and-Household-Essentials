@@ -5,6 +5,7 @@ import { ContactComponent } from './pages/contact/contact.component';
 import { ShopComponent } from './pages/shop/shop.component';
 import { LoginComponent } from './pages/login/login.component';
 
+
 export const routes: Routes = [
   { path: '', component: HomeComponent, title: 'Home' },
   { path: 'about', component: AboutComponent, title: 'About' },
@@ -13,6 +14,8 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent, title: 'Login'  },
   { path: '**', redirectTo: '' } // catch invalid routes
 ];
+
+
 
 
 
